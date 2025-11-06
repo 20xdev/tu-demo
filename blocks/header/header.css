@@ -11,13 +11,13 @@ header nav {
   display: grid;
   grid-template:
     'hamburger brand tools' var(--nav-height)
-    'sections sections sections' 1fr / auto 1fr auto;
+    'sections sections sections' 1fr / auto auto 1fr;
   align-items: center;
-  gap: 0 24px;
+  gap: 0 16px;
   margin: auto;
   max-width: 1248px;
   height: var(--nav-height);
-  padding: 0 24px;
+  padding: 0 16px;
   font-family: var(--body-font-family);
 }
 
@@ -30,16 +30,22 @@ header nav[aria-expanded='true'] {
   min-height: 100dvh;
 }
 
-@media (width >= 900px) {
+@media (width >= 1024px) {
   header nav {
-    display: flex;
-    justify-content: space-between;
-    gap: 0 32px;
-    max-width: 1264px;
+    display: flex !important;
+    grid-template: none;
+    grid-template-areas: none;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 32px;
+    max-width: 1440px;
     padding: 0 32px;
+    height: var(--nav-height);
   }
 
   header nav[aria-expanded='true'] {
+    display: flex !important;
+    grid-template: none;
     min-height: 0;
     overflow: visible;
   }
@@ -57,22 +63,27 @@ header nav a:any-link {
 /* hamburger */
 header nav .nav-hamburger {
   grid-area: hamburger;
-  height: 22px;
+  height: 24px;
+  width: 24px;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
+  order: 0;
 }
 
 header nav .nav-hamburger button {
-  height: 22px;
+  height: 24px;
+  width: 24px;
   margin: 0;
   border: 0;
   border-radius: 0;
   padding: 0;
-  background-color: var(--background-color);
+  background-color: transparent;
   color: inherit;
   overflow: initial;
   text-overflow: initial;
   white-space: initial;
+  cursor: pointer;
 }
 
 header nav .nav-hamburger-icon,
@@ -128,9 +139,9 @@ header nav[aria-expanded='true'] .nav-hamburger-icon::after {
   transform: rotate(-45deg);
 }
 
-@media (width >= 900px) {
+@media (width >= 1024px) {
   header nav .nav-hamburger {
-    display: none;
+    display: none !important;
     visibility: hidden;
   }
 }
@@ -138,15 +149,30 @@ header nav[aria-expanded='true'] .nav-hamburger-icon::after {
 /* brand */
 header .nav-brand {
   grid-area: brand;
-  flex-basis: 128px;
   font-size: var(--heading-font-size-s);
   font-weight: 700;
   line-height: 1;
+  display: flex;
+  align-items: center;
 }
 
 header nav .nav-brand img {
-  width: 128px;
-  height: auto;
+  height: 32px;
+  width: auto;
+  display: block;
+}
+
+@media (width >= 1024px) {
+  header .nav-brand {
+    grid-area: none !important;
+    flex: 0 0 auto;
+    margin-right: 16px;
+    order: 1;
+  }
+
+  header nav .nav-brand img {
+    height: 40px;
+  }
 }
 
 /* sections */
@@ -163,29 +189,45 @@ header nav[aria-expanded='true'] .nav-sections {
   align-self: start;
 }
 
+header nav .nav-sections .default-content-wrapper {
+  margin: 0;
+  padding: 0;
+}
+
 header nav .nav-sections ul {
   list-style: none;
   padding-left: 0;
+  margin: 0;
   font-size: var(--body-font-size-s);
 }
 
 header nav .nav-sections ul > li {
   font-weight: 500;
+  margin: 0;
+}
+
+header nav .nav-sections ul > li > a {
+  display: block;
+  padding: 8px 0;
 }
 
 header nav .nav-sections ul > li > ul {
   margin-top: 0;
+  padding-left: 16px;
 }
 
 header nav .nav-sections ul > li > ul > li {
   font-weight: 400;
 }
 
-@media (width >= 900px) {
+@media (width >= 1024px) {
   header nav .nav-sections {
-    display: block;
+    grid-area: none !important;
+    display: block !important;
     visibility: visible;
     white-space: nowrap;
+    flex: 0 1 auto;
+    order: 2;
   }
 
   header nav[aria-expanded='true'] .nav-sections {
@@ -218,20 +260,46 @@ header nav .nav-sections ul > li > ul > li {
     transform: rotate(315deg);
   }
 
-  header nav .nav-sections ul {
-    display: flex;
-    gap: 24px;
+  header nav .nav-sections .default-content-wrapper {
     margin: 0;
+    padding: 0;
+    width: auto;
+    max-width: none;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin: 0;
+    padding: 0;
+    width: auto;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li {
-    flex: 0 1 auto;
+    flex: 0 0 auto;
     position: relative;
+    margin: 0;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li > a {
+    display: inline-block;
+    padding: 8px 0;
+    white-space: nowrap;
+    font-size: var(--body-font-size-s);
+    color: var(--text-color);
+    text-decoration: none;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li > a:hover {
+    color: var(--link-hover-color);
+    text-decoration: underline;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul {
     display: none;
     position: relative;
+    padding-left: 0;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] > ul {
@@ -241,8 +309,10 @@ header nav .nav-sections ul > li > ul > li {
     width: 200px;
     top: 150%;
     padding: 16px;
+    margin: 0;
     background-color: var(--light-color);
     white-space: initial;
+    z-index: 10;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul::before {
@@ -259,10 +329,153 @@ header nav .nav-sections ul > li > ul > li {
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul > li {
     padding: 8px 0;
+    margin: 0;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li > ul > li > a {
+    display: block;
+    padding: 8px;
+    color: var(--text-color);
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li > ul > li > a:hover {
+    background-color: #e8e8e8;
+    text-decoration: none;
+  }
+
+  /* Buttons in navigation */
+  header nav .nav-sections .button-container {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+  }
+
+  header nav .nav-sections .button {
+    padding: 0.5em 1.5em;
+    margin: 0;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    background-color: #0066cc;
+    color: white;
+    font-weight: 600;
+    white-space: nowrap;
+    line-height: 1.25;
+  }
+
+  header nav .nav-sections .button:hover {
+    background-color: #0052a3;
+    text-decoration: none;
   }
 }
 
 /* tools */
 header nav .nav-tools {
   grid-area: tools;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
+
+header nav .nav-tools .default-content-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+header nav .nav-tools .button-container {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+/* Mobile: Hide text in tools, show icon only */
+header nav .nav-tools p,
+header nav .nav-tools a {
+  font-size: 0;
+  line-height: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+header nav .nav-tools .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+header nav .nav-tools .icon img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+/* Mobile: Login button - show icon instead of text */
+header nav .nav-tools .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background-color: transparent;
+  background-image: url('/icons/mob-logged-out.svg');
+  background-size: 24px 24px;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 0;
+  overflow: hidden;
+  text-indent: -9999px;
+  flex-shrink: 0;
+}
+
+/* Desktop: Show both icon and text */
+@media (width >= 1024px) {
+  header nav .nav-tools {
+    grid-area: none !important;
+    flex: 0 0 auto;
+    order: 3;
+    margin-left: auto;
+  }
+
+  header nav .nav-tools .default-content-wrapper {
+    gap: 24px;
+  }
+
+  header nav .nav-tools p,
+  header nav .nav-tools a {
+    font-size: var(--body-font-size-s);
+    line-height: 1.6;
+  }
+  
+  header nav .nav-tools .icon {
+    margin-right: 6px;
+  }
+
+  /* Desktop: Login button - restore normal button styling */
+  header nav .nav-tools .button {
+    width: auto;
+    height: auto;
+    padding: 0.5em 1.5em;
+    margin: 0;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    background-color: #007a3d;
+    background-image: none;
+    color: white;
+    text-indent: 0;
+    overflow: visible;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  header nav .nav-tools .button:hover {
+    background-color: #006633;
+  }
+}
+
